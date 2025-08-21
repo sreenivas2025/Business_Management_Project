@@ -1,0 +1,54 @@
+# === Maven target build directory ===
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# === IDE files ===
+*.iml
+.idea/
+*.ipr
+*.iws
+.vscode/
+*.swp
+
+# === Logs ===
+*.log
+logs/
+*.out
+
+# === OS generated files ===
+.DS_Store
+Thumbs.db
+
+# === Environment & Secrets ===
+*.env
+application-*.yml
+application-*.properties
+secrets.yml
+*.secret
+
+# === Kubernetes Manifests (only if generated during CI/CD) ===
+*.yaml.backup
+*.yml.backup
+
+# === Docker ===
+*.pid
+docker-compose.override.yml
+
+# === SonarQube ===
+.scannerwork/
+
+# === Node/NPM (if frontend included) ===
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# === Coverage / Reports ===
+coverage/
+target/site/
+surefire-reports/
+jacoco.exec
+
+# === Temporary files ===
+*.tmp
+*.bak
+*.swp
