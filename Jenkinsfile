@@ -55,7 +55,7 @@ pipeline {
                     groupId: 'com.business',
                     version: '0.0.1-SNAPSHOT',   // must match POM
                     repository: 'maven-snapshots',  // snapshot repo
-                    credentialsId: 'nexus-credentials',
+                    credentialsId: 'nexus-jenkins-creds',
                     artifacts: [
                         [artifactId: 'BusinessProject',    // must match POM
                         classifier: '',
