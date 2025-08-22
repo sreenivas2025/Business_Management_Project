@@ -54,7 +54,7 @@ pipeline {
                     nexusUrl: 'nexus:8081',
                     groupId: 'com.business',
                     version: '1.0.0',
-                    repository: 'maven-releases',
+                    repository: 'maven-snapshots',
                     credentialsId: 'nexus-jenkins-creds',
                     artifacts: [
                         [artifactId: 'business-mgmt-app',
