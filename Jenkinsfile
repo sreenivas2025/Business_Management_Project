@@ -68,13 +68,19 @@ pipeline {
 
 
         stage ("Build App Image") {
-
-            tools {
-                docker 'docker-v2'
-            }
             steps {
-                sh "docker images"
-                //sh "docker build -t ${REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER} ."
+                script {
+                    // Add docker tool to PATH
+                    def dockerHome = tool name: 'docker-v2', type: 'dockerTool'
+                    env.PATH = "${dockerHome}/bin:${env.PATH}"
+
+                    // Check docker installation
+                    sh "docker --version"
+                    sh "docker images"
+
+                    // Build Docker image
+                    // sh "docker build -t ${REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER} ."
+                }
             }
         }
 
