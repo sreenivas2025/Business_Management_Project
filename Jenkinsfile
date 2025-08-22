@@ -89,13 +89,13 @@ pipeline {
             }
         }
 
-        // stage ("Deploy to cluster dev-kt-k8s") {
-        //     steps {
-        //         withKubeConfig(credentialsId: 'kubeconfig-dev-kt-k8s') {
-        //             sh "kubectl apply -f k8s/business-mgmt-app-deploy.yaml"
-        //         }
-        //     }
-        // }
+        stage ("Deploy to cluster dev-kt-k8s") {
+            steps {
+                withKubeConfig(credentialsId: 'kubeconfig-dev-kt-k8s') {
+                    sh "kubectl apply -f business-mgmt-app-deploy.yaml"
+                }
+            }
+        }
     }
 }
 
