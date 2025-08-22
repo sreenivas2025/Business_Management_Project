@@ -9,14 +9,14 @@ pipeline {
 
     stages {
 
-    //    stage("Build Code") {
-    //         tools {
-    //             maven 'maven-3.9.11'
-    //         }
-    //         steps {
-    //             sh "mvn clean install -DskipTests"
-    //         }
-    //     }
+        stage("Build Code") {
+            tools {
+                maven 'maven-3.9.11'
+            }
+            steps {
+                sh "mvn clean install -DskipTests"
+            }
+        }
 
 
         // stage("Run Code Scanning") {
@@ -70,16 +70,9 @@ pipeline {
         stage ("Build App Image") {
             steps {
                 script {
-                    // Add docker tool to PATH
-                    def dockerHome = tool name: 'docker-v2', type: 'dockerTool'
-                    env.PATH = "${dockerHome}/bin:${env.PATH}"
-
-                    // Check docker installation
-                    sh "docker --version"
-                    sh "docker images"
-
+                
                     // Build Docker image
-                    // sh "docker build -t ${REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER} ."
+                    sh "docker build -t ${REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER} ."
                 }
             }
         }
