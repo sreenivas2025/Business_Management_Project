@@ -5,7 +5,7 @@ pipeline {
         REGISTRY = "docker.io"
         IMAGE_NAME = "vsiraparapu/business-mgmt-app"
         SONAR_HOST_URL = "http://sonarqube.local"
-        SONAR_SCANNER = "sonar-scanner" // sonar scanner tool must be configured in Jenkins
+        SONAR_SCANNER = "sonar-scanner-7.2.0" // sonar scanner tool must be configured in Jenkins
     }
 
     stages {
@@ -20,19 +20,19 @@ pipeline {
         }
 
 
-        // stage ("Run Code Scanning") {
-        //     steps {
-        //         withSonarQubeEnv('SonarQube') { // Jenkins SonarQube server config name
-        //             sh '''
-        //                 ${SONAR_SCANNER} \
-        //                   -Dsonar.projectKey=business-mgmt-app \
-        //                   -Dsonar.projectName=business-mgmt-app \
-        //                   -Dsonar.sources=src \
-        //                   -Dsonar.java.binaries=target/classes
-        //             '''
-        //         }
-        //     }
-        // }
+        stage ("Run Code Scanning") {
+            steps {
+                withSonarQubeEnv('sonar-local') { // Jenkins SonarQube server config name
+                    sh '''
+                        ${SONAR_SCANNER} \
+                          -Dsonar.projectKey=business-mgmt-app \
+                          -Dsonar.projectName=business-mgmt-app \
+                          -Dsonar.sources=src \
+                          -Dsonar.java.binaries=target/classes
+                    '''
+                }
+            }
+        }
 
         // stage ("Check Quality Gate") {
         //     steps {
