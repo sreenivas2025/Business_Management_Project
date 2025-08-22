@@ -59,7 +59,7 @@ pipeline {
                     artifacts: [
                         [artifactId: 'business-mgmt-app',
                         classifier: '',
-                        file: 'target/*.jar',
+                        file: 'target/BusinessProject-0.0.1-SNAPSHOT.jar',
                         type: 'jar']
                     ]
                 )
