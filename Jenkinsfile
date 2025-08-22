@@ -46,17 +46,28 @@ pipeline {
             }
         }
 
-        // stage ("Run Tests") {
-        //     steps {
-        //         sh "mvn test"
-        //     }
-        // }
+        stage("Upload Artifacts") {
+            steps {
+                nexusArtifactUploader(
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    nexusUrl: 'nexus:8081',
+                    groupId: 'com.business',
+                    version: '1.0.0',
+                    repository: 'maven-releases',
+                    credentialsId: 'nexus-jenkins-creds',
+                    artifacts: [
+                        [artifactId: 'business-mgmt-app',
+                        classifier: '',
+                        file: 'target/*.jar',
+                        type: 'jar']
+                    ]
+                )
+            }
+        }
 
-        // stage ("Upload Artifacts") {
-        //     steps {
-        //         archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-        //     }
-        // }
+
+
 
         // stage ("Build App Image") {
         //     steps {
@@ -84,3 +95,4 @@ pipeline {
         // }
     }
 }
+
