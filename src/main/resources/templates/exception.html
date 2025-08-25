@@ -53,6 +53,15 @@
 			</div>
 		</div>
 	</center>
+
+	<script>
+		// Automatically add rel="noopener noreferrer" to all external links with target="_blank"
+		document.querySelectorAll('a[target="_blank"]').forEach(link => {
+			if (!link.hasAttribute('rel')) {
+				link.setAttribute('rel', 'noopener noreferrer');
+			}
+		});
+	</script>
 </body>
 
 </html>

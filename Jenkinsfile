@@ -76,6 +76,7 @@ pipeline {
                 }
             }
         }
+        
 
         stage ("Push App Image") {
             steps {
