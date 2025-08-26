@@ -61,19 +61,17 @@ pipeline {
                 )
             }
         }
+        stage ("Build App Image") {
+            steps {
+                script {
+                
+                    // Build Docker image
+                    sh "docker build -t ${REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER} ."
+                }
+            }
+        }
     }
 }
-
-
-//         stage ("Build App Image") {
-//             steps {
-//                 script {
-                
-//                     // Build Docker image
-//                     sh "docker build -t ${REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER} ."
-//                 }
-//             }
-//         }
 
 //         stage ("Push App Image") {
 //             steps {
