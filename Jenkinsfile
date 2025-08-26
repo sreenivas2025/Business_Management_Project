@@ -4,7 +4,6 @@ pipeline {
     environment {
         REGISTRY = "docker.io"
         IMAGE_NAME = "psrao2025/business-mgmt-app"
-        SONAR_HOST_URL = "http://sonarqube.local"
     }
 
     stages {
