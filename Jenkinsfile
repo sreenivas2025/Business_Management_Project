@@ -36,7 +36,6 @@ pipeline {
             }
         }
     }
-
         stage ("Check Quality Gate") {
             steps {
                 timeout(time:2, unit: 'MINUTES') {
