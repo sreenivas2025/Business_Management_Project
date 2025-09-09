@@ -1,20 +1,8 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mysql-pvc
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
-  labels:
-    app: mysql
+  namespace: businessproject
 spec:
   replicas: 1
   selector:
@@ -28,35 +16,30 @@ spec:
       containers:
         - name: mysql
           image: mysql:8.0
-          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3306
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: "secret"
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: mysql-root-password
             - name: MYSQL_DATABASE
-              value: "businessproject"
-            - name: MYSQL_USER
-              value: "appuser"
-            - name: MYSQL_PASSWORD
-              value: "appsecret"
+              value: businessproject
           volumeMounts:
             - name: mysql-storage
               mountPath: /var/lib/mysql
+          livenessProbe:
+            exec:
+              command: ["mysqladmin", "ping", "-h", "127.0.0.1", "-p$MYSQL_ROOT_PASSWORD"]
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command: ["mysqladmin", "ping", "-h", "127.0.0.1", "-p$MYSQL_ROOT_PASSWORD"]
+            initialDelaySeconds: 10
+            periodSeconds: 5
       volumes:
         - name: mysql-storage
           persistentVolumeClaim:
             claimName: mysql-pvc
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mysql
-spec:
-  selector:
-    app: mysql
-  ports:
-    - name: mysql
-      port: 3306
-      targetPort: 3306
-  type: ClusterIP

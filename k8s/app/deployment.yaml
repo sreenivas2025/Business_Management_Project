@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: business-app
+  namespace: businessproject
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: business-app
+  template:
+    metadata:
+      labels:
+        app: business-app
+    spec:
+      containers:
+        - name: business-app
+          image: docker.io/vsiraparapu/business-mgmt-app:27   # replace with your image
+          ports:
+            - containerPort: 2330
+          env:
+            - name: SERVER_PORT
+              value: "2330"
+          envFrom:
+            - configMapRef:
+                name: app-config
+            - secretRef:
+                name: mysql-secret
+          livenessProbe:
+            httpGet:
+              path: /home
+              port: 2330
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /home
+              port: 2330
+            initialDelaySeconds: 10
+            periodSeconds: 5
