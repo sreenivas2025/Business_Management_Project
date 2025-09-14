@@ -90,22 +90,19 @@ pipeline {
                 }
             }
         }
+        stage ("Deploy to cluster docker-desktop") {
+            steps {
+                withKubeConfig(credentialsId: 'kubeconfig-dev-kt-k8s') {
+                    sh "kubectl apply -f k8s/namespace.yaml"
+                    sh "kubectl apply -f k8s/mysql/"
+
+                    sh """
+                        sed -i 's#docker.io/psrao2025/business-mgmt-app:[0-9]\\+#docker.io/psrao2025/business-mgmt-app:${BUILD_NUMBER}#' k8s/app/deployment.yaml
+                        kubectl apply -f k8s/app/
+                    """
+                }
+            }
+        }
     }
 }
-
-//         stage ("Deploy to cluster dev-kt-k8s") {
-//             steps {
-//                 withKubeConfig(credentialsId: 'kubeconfig-dev-kt-k8s') {
-//                     sh "kubectl apply -f k8s/namespace.yaml"
-//                     sh "kubectl apply -f k8s/mysql/"
-
-//                     sh """
-//                         sed -i 's#docker.io/vsiraparapu/business-mgmt-app:[0-9]\\+#docker.io/vsiraparapu/business-mgmt-app:${BUILD_NUMBER}#' k8s/app/deployment.yaml
-//                         kubectl apply -f k8s/app/
-//                     """
-//                 }
-//             }
-//         }
-//     }
-// }
 
