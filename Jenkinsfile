@@ -79,21 +79,19 @@ pipeline {
                 }
             }
         }
+        stage ("Push App Image") {
+            steps {
+              
+                withCredentials([usernamePassword(credentialsId: 'docker-jenkins-creds', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                    sh """
+                       echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                       docker push ${REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER}
+                    """
+                }
+            }
+        }
     }
 }
-        
-
-//         stage ("Push App Image") {
-//             steps {
-              
-//                 withCredentials([usernamePassword(credentialsId: 'docker-jenkins-creds', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
-//                     sh """
-//                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-//                        docker push ${REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER}
-//                     """
-//                 }
-//             }
-//         }
 
 //         stage ("Deploy to cluster dev-kt-k8s") {
 //             steps {
