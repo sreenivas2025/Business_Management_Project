@@ -10,6 +10,10 @@ pipeline {
         REGISTRY = "docker.io"
         IMAGE_NAME = "psrao2025/business-mgmt-app"
         TAG = "${params.DOCKER_TAG}"
+        APP_NAME = "business-mgmt-app"
+        APP_VERSION = "${BUILD_NUMBER}"
+        CLUSTER_NAME = "bpc"   // default kind cluster name
+
         
     }
 
@@ -79,30 +83,30 @@ pipeline {
                 }
             }
         }
-        stage ("Push App Image") {
+        stage('Load Image into Kind') {
             steps {
-              
-                withCredentials([usernamePassword(credentialsId: 'docker-jenkins-creds', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
-                    sh """
-                       echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                       docker push ${REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER}
-                    """
-                }
-            }
-        }
-        stage ("Deploy to cluster docker-desktop") {
-            steps {
-                withKubeConfig(credentialsId: 'kubeconfig-dev-kt-k8s') {
-                    sh "kubectl apply -f k8s/namespace.yaml"
-                    sh "kubectl apply -f k8s/mysql/"
-
-                    sh """
-                        sed -i 's#docker.io/psrao2025/business-mgmt-app:[0-9]\\+#docker.io/psrao2025/business-mgmt-app:${BUILD_NUMBER}#' k8s/app/deployment.yaml
-                        kubectl apply -f k8s/app/
-                    """
-                }
+                sh """
+                    echo ">>> Loading image into Kind cluster"
+                    kind load docker-image ${APP_NAME}:${APP_VERSION} --name ${CLUSTER_NAME}
+                """
             }
         }
     }
 }
+
+//         stage ("Deploy to cluster docker-desktop") {
+//             steps {
+//                 withKubeConfig(credentialsId: 'kubeconfig-dev-kt-k8s') {
+//                     sh "kubectl apply -f k8s/namespace.yaml"
+//                     sh "kubectl apply -f k8s/mysql/"
+
+//                     sh """
+//                         sed -i 's#docker.io/psrao2025/business-mgmt-app:[0-9]\\+#docker.io/psrao2025/business-mgmt-app:${BUILD_NUMBER}#' k8s/app/deployment.yaml
+//                         kubectl apply -f k8s/app/
+//                     """
+//                 }
+//             }
+//         }
+//     }
+// }
 
