@@ -64,20 +64,19 @@ pipeline {
                 )
             }
         }
+       
+        stage("Build Docker Image") {
+            steps {
+                script {
+                    sh """
+                        echo "Building Docker image..."
+                        docker build -t ${IMAGE_NAME}:${env.BUILD_NUMBER} .
+                    """
+                }
+            }
+        }
     }
 }
-    
-
-//         stage("Build Docker Image") {
-//             steps {
-//                 script {
-//                     sh """
-//                         echo "Building Docker image..."
-//                         docker build -t ${IMAGE_NAME}:${env.BUILD_NUMBER} .
-//                     """
-//                 }
-//             }
-//         }
 
 //         stage("Load Image into KIND Cluster") {
 //             steps {
