@@ -75,19 +75,19 @@ pipeline {
                 }
             }
         }
+        stage("Load Image into KIND Cluster") {
+            steps {
+                script {
+                    echo "Loading image into KIND cluster named '${KIND_CLUSTER}'..."
+                    sh """
+                        kind load docker-image ${IMAGE_NAME}:${env.BUILD_NUMBER} --name ${KIND_CLUSTER}
+                    """
+                }
+            }
+        }
     }
 }
 
-//         stage("Load Image into KIND Cluster") {
-//             steps {
-//                 script {
-//                     echo "Loading image into KIND cluster named '${KIND_CLUSTER}'..."
-//                     sh """
-//                         kind load docker-image ${IMAGE_NAME}:${env.BUILD_NUMBER} --name ${KIND_CLUSTER}
-//                     """
-//                 }
-//             }
-//         }
 //         stage("Deploy to KIND Cluster") {
 //             steps {
 //                 withKubeConfig(credentialsId: 'kubeconfig-kind') {
