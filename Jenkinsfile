@@ -78,36 +78,61 @@ pipeline {
         stage("Load Image into KIND Cluster") {
             steps {
                 script {
-                    echo "Loading image into KIND cluster named '${KIND_CLUSTER}'..."
+                    echo "📦 Loading Docker image into KIND cluster '${KIND_CLUSTER}'..."
+
+                    // Verify Kind is installed
                     sh """
+                        if ! command -v kind &> /dev/null; then
+                        echo "Kind CLI not found. Installing temporarily..."
+                        curl -Lo kind https://kind.sigs.k8s.io/dl/v0.23.0/kind-linux-amd64
+                        chmod +x kind
+                        sudo mv kind /usr/local/bin/
+                        fi
+                    """
+
+                    // Verify cluster exists
+                    sh """
+                        if ! kind get clusters | grep -q "^${KIND_CLUSTER}\$"; then
+                        echo "Cluster '${KIND_CLUSTER}' not found. Please create it using 'kind create cluster --name ${KIND_CLUSTER}'"
+                        exit 1
+                        fi
+                    """
+
+                    // Load Docker image into Kind
+                    sh """
+                        echo "Loading image ${IMAGE_NAME}:${env.BUILD_NUMBER} into cluster ${KIND_CLUSTER}..."
                         kind load docker-image ${IMAGE_NAME}:${env.BUILD_NUMBER} --name ${KIND_CLUSTER}
                     """
+
+                    echo "✅ Image loaded successfully into Kind cluster!"
                 }
-            }
-        }
-        stage("Deploy to KIND Cluster") {
-            steps {
-                withKubeConfig(credentialsId: 'kubeconfig-kind') {
-                    sh """
-                        echo "Deploying to KIND cluster..."
-                        kubectl apply -f k8s/namespace.yaml
-                        kubectl apply -f k8s/mysql/
-                        sed -i "s#business-mgmt-app:[0-9]\\+#business-mgmt-app:${BUILD_NUMBER}#g" k8s/app/deployment.yaml
-                        kubectl apply -f k8s/app/
-                    """
-                }
-            }
-        }
-    stage("Verify Deployment") {
-            steps {
-                sh """
-                    kubectl get pods -n business-mgmt //namespace name
-                    kubectl get svc -n business-mgmt //namespacename
-                """
             }
         }
     }
 }
+//         stage("Deploy to KIND Cluster") {
+//             steps {
+//                 withKubeConfig(credentialsId: 'kubeconfig-kind') {
+//                     sh """
+//                         echo "Deploying to KIND cluster..."
+//                         kubectl apply -f k8s/namespace.yaml
+//                         kubectl apply -f k8s/mysql/
+//                         sed -i "s#business-mgmt-app:[0-9]\\+#business-mgmt-app:${BUILD_NUMBER}#g" k8s/app/deployment.yaml
+//                         kubectl apply -f k8s/app/
+//                     """
+//                 }
+//             }
+//         }
+//     stage("Verify Deployment") {
+//             steps {
+//                 sh """
+//                     kubectl get pods -n businessproject 
+//                     kubectl get svc -n businessproject 
+//                 """
+//             }
+//         }
+//     }
+// }
 
 
 
