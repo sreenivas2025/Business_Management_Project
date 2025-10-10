@@ -85,22 +85,29 @@ pipeline {
                 }
             }
         }
+        stage("Deploy to KIND Cluster") {
+            steps {
+                withKubeConfig(credentialsId: 'kubeconfig-kind') {
+                    sh """
+                        echo "Deploying to KIND cluster..."
+                        kubectl apply -f k8s/namespace.yaml
+                        kubectl apply -f k8s/mysql/
+                        sed -i 's#psrao2025/business-mgmt-app:[0-9]\\+#psrao2025/business-mgmt-app:${BUILD_NUMBER}#' k8s/app/deployment.yaml
+                        kubectl apply -f k8s/app/
+                    """
+                }
+            }
+        }
+    stage("Verify Deployment") {
+            steps {
+                sh """
+                    kubectl get pods -n business-mgmt //namespace name
+                    kubectl get svc -n business-mgmt //namespacename
+                """
+            }
+        }
     }
 }
 
-//         stage("Deploy to KIND Cluster") {
-//             steps {
-//                 withKubeConfig(credentialsId: 'kubeconfig-kind') {
-//                     sh """
-//                         echo "Deploying to KIND cluster..."
-//                         kubectl apply -f k8s/namespace.yaml
-//                         kubectl apply -f k8s/mysql/
-//                         sed -i 's#psrao2025/business-mgmt-app:[0-9]\\+#psrao2025/business-mgmt-app:${BUILD_NUMBER}#' k8s/app/deployment.yaml
-//                         kubectl apply -f k8s/app/
-//                     """
-//                 }
-//             }
-//         }
-//     }
-// }
+
 
