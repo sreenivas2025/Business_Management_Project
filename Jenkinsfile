@@ -92,7 +92,7 @@ pipeline {
                         echo "Deploying to KIND cluster..."
                         kubectl apply -f k8s/namespace.yaml
                         kubectl apply -f k8s/mysql/
-                        sed -i 's#psrao2025/business-mgmt-app:[0-9]\\+#psrao2025/business-mgmt-app:${BUILD_NUMBER}#' k8s/app/deployment.yaml
+                        sed -i "s#business-mgmt-app:[0-9]\\+#business-mgmt-app:${BUILD_NUMBER}#g" k8s/app/deployment.yaml
                         kubectl apply -f k8s/app/
                     """
                 }
@@ -108,6 +108,7 @@ pipeline {
         }
     }
 }
+
 
 
 
