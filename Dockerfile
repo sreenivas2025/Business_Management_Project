@@ -5,8 +5,8 @@ FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
 # Copy your already built JAR into the container
-COPY target/BusinessProject-0.0.1-SNAPSHOT.jar app.jar
-
+ COPY target/*.jar $APP_HOME/app.jar
+#COPY target/BusinessProject-0.0.1-SNAPSHOT.jar app.jar
 # Expose the Spring Boot app port
 EXPOSE 2330
 
