@@ -4,9 +4,9 @@ FROM eclipse-temurin:17-jdk
 # Set working directory
 WORKDIR /app
 
-# Copy your already built JAR into the container
- COPY target/*.jar $APP_HOME/app.jar
-#COPY target/BusinessProject-0.0.1-SNAPSHOT.jar app.jar
+# Copy your already built JAR into the container ( THID FILE USED FOR CI-CD BUILD ONLY )
+ 
+COPY target/BusinessProject-0.0.1-SNAPSHOT.jar app.jar
 # Expose the Spring Boot app port
 EXPOSE 2330
 
