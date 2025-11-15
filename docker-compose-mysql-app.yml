@@ -18,7 +18,7 @@ services:
       retries: 5
 
   app:
-    image: psrao2025/business-mgmt-app
+    image: psrao2025/business-mgmt-app:10
     depends_on:
       mysql:
         condition: service_healthy
