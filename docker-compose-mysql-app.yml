@@ -19,7 +19,7 @@ services:
 
   app:
     build: .
-    dockerfile: Dockerfile
+      dockerfile: Dockerfile
     depends_on:
       mysql:
         condition: service_healthy
