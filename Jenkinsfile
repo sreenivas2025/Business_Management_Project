@@ -12,8 +12,10 @@ pipeline {
         TAG = "${params.DOCKER_TAG}"
         
     }
+
+    stages {)
+    }
 }
-//     stages {
 
 //         stage("Build Code") {
 //             tools {
