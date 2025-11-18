@@ -38,10 +38,10 @@ pipeline {
                             -Dsonar.sources=src \
                             -Dsonar.java.binaries=target/classes
                         """
+                    }
                 }
             }
         }
-    }
 }
 //         stage ("Check Quality Gate") {
 //             steps {
