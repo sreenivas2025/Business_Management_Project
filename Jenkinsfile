@@ -25,8 +25,6 @@ pipeline {
         }
     }
 
-
-
         stage("Run Code Scanning") {
             steps {
                 script {
@@ -41,10 +39,10 @@ pipeline {
                             -Dsonar.sources=src \
                             -Dsonar.java.binaries=target/classes
                         """
-                    }
                 }
             }
         }
+    }
 }
 //         stage ("Check Quality Gate") {
 //             steps {
