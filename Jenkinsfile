@@ -24,7 +24,6 @@ pipeline {
             }
         }
     }
-
         stage("Run Code Scanning") {
             steps {
                 script {
