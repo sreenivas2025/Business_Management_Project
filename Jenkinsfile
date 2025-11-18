@@ -38,7 +38,7 @@ pipeline {
                             -Dsonar.sources=src \
                             -Dsonar.java.binaries=target/classes
                         """
-                }
+                    }
                 
             }
         }
