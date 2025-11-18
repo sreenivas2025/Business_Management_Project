@@ -27,24 +27,25 @@ pipeline {
 
 
 
-//         stage("Run Code Scanning") {
-//             steps {
-//                 script {
-//                     // resolve the Sonar Scanner installation path
-//                     def scannerHome = tool name: 'sonar-scanner-7.2.0', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+        stage("Run Code Scanning") {
+            steps {
+                script {
+                    // resolve the Sonar Scanner installation path
+                    def scannerHome = tool name: 'sonar-scanner-7.2.0', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
 
-//                     withSonarQubeEnv('sonar-local') {
-//                         sh """
-//                             ${scannerHome}/bin/sonar-scanner \
-//                             -Dsonar.projectKey=business-mgmt-app \
-//                             -Dsonar.projectName=business-mgmt-app \
-//                             -Dsonar.sources=src \
-//                             -Dsonar.java.binaries=target/classes
-//                         """
-//                     }
-//                 }
-//             }
-//         }
+                    withSonarQubeEnv('sonar-local') {
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=business-mgmt-app \
+                            -Dsonar.projectName=business-mgmt-app \
+                            -Dsonar.sources=src \
+                            -Dsonar.java.binaries=target/classes
+                        """
+                    }
+                }
+            }
+        }
+}
 //         stage ("Check Quality Gate") {
 //             steps {
 //                 timeout(time: 2, unit: 'MINUTES') {
@@ -72,16 +73,16 @@ pipeline {
 //                 )
 //             }
 //         }
-        stage ("Build App Image") {
-            steps {
-                script {
+//         stage ("Build App Image") {
+//             steps {
+//                 script {
                 
-                    // Build Docker image
-                    sh "docker build -t ${REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER} ."
-                }
-            }
-        }
-}
+//                     // Build Docker image
+//                     sh "docker build -t ${REGISTRY}/${IMAGE_NAME}:${env.BUILD_NUMBER} ."
+//                 }
+//             }
+//         }
+
 //         stage ("Push App Image") {
 //             steps {
               
@@ -93,6 +94,7 @@ pipeline {
 //                 }
 //             }
 //         }
+// }
 //         stage ("Deploy to cluster docker-desktop") {
 //             steps {
 //                 withKubeConfig(credentialsId: 'kubeconfig-dev-kt-k8s') {
