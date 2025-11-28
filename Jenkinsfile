@@ -1,6 +1,6 @@
 pipeline {
     agent any
-     parameters {
+    parameters {
         choice(name: 'DEPLOY_ENV', choices: ['dev', 'prod'], description: 'Choose which environment to deploy: dev or prod')
         choice(name: 'DOCKER_TAG', choices: ['dev', 'prod'], description: 'Choose the Docker image tag for the deployment')
         booleanParam(name: 'SWITCH_TRAFFIC', defaultValue: false, description: 'Switch traffic between dev and prod')
@@ -23,7 +23,6 @@ pipeline {
                 sh "mvn clean install -DskipTests"
             }
         }
-    }
         stage("Run Code Scanning") {
             steps {
                 script {
@@ -38,7 +37,8 @@ pipeline {
                             -Dsonar.sources=src \
                             -Dsonar.java.binaries=target/classes
                         """
-                    }  
+                    } 
+                } 
             }
         }
     }
